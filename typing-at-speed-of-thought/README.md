@@ -1,7 +1,6 @@
 Typing at the speed of thought
 ===
 Do you type as fast as you think?
-Or do you think as fast as you type?
 
 ---
 
