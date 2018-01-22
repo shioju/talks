@@ -3,6 +3,21 @@ Hashgraph
 
 ## The Future of Decentralized Technology
 
+<style>
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+.text {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.pic {
+  height: 700px;
+}
+</style>
+
 ---
 
 # Byzantine Generals Problem
@@ -11,7 +26,7 @@ Hashgraph
   - All loyal lieutenants obey the same order
   - If the commanding general is loyal, then every loyal lieutenant obeys the order he sends
 
-![40%](images/bgp1.png)![40%](images/bgp1.png)
+![30%](images/bgp1.png)![30%](images/bgp2.png)
 
 ---
 
@@ -22,6 +37,27 @@ Hashgraph
 
 ---
 
+# Asnchronous Byzantine Fault Tolerance (BFT)
+
+- What does Byzantine mean?
+  - will reach consensus
+  - know when consensus reached
+  - consensus never changes
+- assumptions
+  - attacker controls < 1/3 (theoretical limit)
+  - attacker controls the network
+    - messages between honest nodes eventually get through
+    - asynchronous BFT -> no assumptions on the timing
+
+---
+
+# Can Bitcoin tolerate 1/3 attacker nodes?
+
+![70% center](images/attack.png)
+
+
+---
+
 # Distributed Consensus Algorithms
 
 - Proof-of-work (Bitcoin, Ethereum)
@@ -29,8 +65,6 @@ Hashgraph
   - waste of energy ($1M/day ~ Mauritius energy consumption)
 - Proof-of-stake (Ethereum Casper)
   - much lower energy consumption
-- Proof-of-burn (Slimcoin)
-  - mining can be done on low power machine (just a few SHA256 hashes)
 - Leader-based (Hyperledger Fabric)
   - Paxos, Raft, PBFT
 - Voting-based (no implementation)
@@ -39,13 +73,9 @@ Hashgraph
 
 ---
 
-![center](images/blockchain-and-hashgraph.jpeg)
-
----
-
 # What is hashgraph?
 
-Hashgraph is data structure and consensus algorithm that is:
+Hashgraph is a data structure and consensus algorithm that is:
 
 - Fast: With a very high throughput and low consensus latency
 - Secure: Asynchronous Byzantine fault tolerant
@@ -59,16 +89,6 @@ These properties enable new decentralized applications such as a stock market, i
 
 ---
 
-# Assumptions to achieve Byzantine Fault Tolerance (BFT)
-
-- more than 2/3 of participants are honest (theoretical limit for BFT solutions)
-  - so how does Bitcoin tolerate up to < 50% malicious nodes?
-- message between honest members eventually get through
-  - other than that, attackers are allowed to completely control the network, deleting and delaying messages arbitrarily
-  - if messages *never* get through, any distributed system will fail. So it is a failure of the network, not of the consensus algorithm
-
----
-
 # Interesting characteristics
 
 - absolute confirmation of transactions (unlike proof of work)
@@ -79,26 +99,110 @@ These properties enable new decentralized applications such as a stock market, i
 
 ---
 
+![center](images/blockchain-and-hashgraph.jpeg)
+
+---
+
 # The consensus algorithm
 
 Refer to [Hashgraph graphical example](graphical.pdf)
 
 ---
 
-Intuition of how hashgraph works
-
-- order transactions by the time a majority of the nodes learns about it (thru the gossips)
-  - must be 2/3 or more, 50% doesn't work against 1/3 attackers
-- what are witnesses for? some kind of optimization to save computations
-- what is strongly seeing for? to protect against forking
+<div class="container">
+<img class="pic" src="images/01-initial.png">
+</div>
 
 ---
 
-# Real world applications
+<div class="container">
+<img class="pic" src="images/02-gossip.png">
+<div class="text">
+<p>Randomly pick someone to gossip with</p>
+<img src="images/03-gossip-internals.png">
+</div>
+</div>
 
-- time-sensitive
-  - stock exchange
-- high throughput
+---
+
+<div class="container">
+<img class="pic" src="images/06-hashgraph.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/07-round-created.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/08-witnesses.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/10-fame1.png">
+<img class="pic" src="images/11-fame2.png">
+<img class="pic" src="images/12-fame3.png">
+<img class="pic" src="images/13-fame4.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/14-strongly-seeing1.png">
+<img class="pic" src="images/15-strongly-seeing2.png">
+<img class="pic" src="images/16-strongly-seeing3.png">
+<img class="pic" src="images/17-strongly-seeing4.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/18-b2-famous.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/19-c2-votes.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/20-c2-count-votes.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/21-decide-more-fames.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/22-round-received.png">
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/23-not-received-yet.png">
+</div>
+
+---
+
+# Intuition of how hashgraph works
+
+- order transactions by the time a majority of the nodes learns about it (thru the gossips)
+  - must be 2/3 or more, received by 50% is not good enough when 1/3 are attackers
+- what are witnesses for? some kind of optimization to save computations
+- what is strongly seeing for? to protect against forking
 
 ---
 
@@ -110,6 +214,9 @@ http://research.microsoft.com/users/lamport/pubs/pubs.html#byz
 How Hashgraph Works (Graphically)
 http://www.swirlds.com/downloads/SWIRLDS-TR-2016-02.pdf
 
+Hashgraph security and attack resilience
+https://www.youtube.com/watch?v=pcToFASnyrc
+
 Deconfusing Decentralization
 https://youtu.be/7S1IqaSLrq8
 
@@ -118,6 +225,10 @@ https://youtu.be/ZrFrXFdRW4k
 
 Leemon Baird x Havard Talk
 https://youtu.be/IjQkag6VOo0
+
+---
+
+# References and recommended reading
 
 Beginner's Guide to Ethereum Casper Hardfork
 https://blockonomi.com/ethereum-casper/
