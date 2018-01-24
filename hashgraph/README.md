@@ -187,6 +187,8 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 <img class="pic" src="images/20-c2-count-votes.png">
 <div class="text">
 <p>B4 can strongly see all 4 votes, and decides that C2 is not famous</p>
+<p>But assuming B4 wasn't able to strongly see a <strong>supermajority</strong> of the same votes, it will fail to decide the result, and will vote based on the majority of its collected votes, and leave it to other witnesses to decide (potentially from future rounds).</p>
+<p></p>
 </div>
 </div>
 
