@@ -12,9 +12,13 @@ Hashgraph
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding-left: 100px;
 }
 .pic {
   height: 700px;
+}
+strong {
+  color: maroon;
 }
 </style>
 
@@ -26,13 +30,15 @@ Hashgraph
   - All loyal lieutenants obey the same order
   - If the commanding general is loyal, then every loyal lieutenant obeys the order he sends
 
-![30%](images/bgp1.png)![30%](images/bgp2.png)
+![40%](images/bgp1.png)![40%](images/bgp2.png)
 
 ---
 
 # Byzantine Generals Problem
 
-- distributed systems need to deal with failure or conflicting behaviours of its components
+- distributed systems in real life
+  - need to deal with failure or conflicting behaviours of its components
+  - need consensus on the distributed state
 - fun fact: *Lamport: "I have long felt that, because it was posed as a cute problem about philosophers seated around a table, Dijkstra's dining philosopher's problem received much more attention than it deserves."*
 
 ---
@@ -43,7 +49,7 @@ Hashgraph
   - will reach consensus
   - know when consensus reached
   - consensus never changes
-- assumptions
+- Assumptions
   - attacker controls < 1/3 (theoretical limit)
   - attacker controls the network
     - messages between honest nodes eventually get through
@@ -81,7 +87,7 @@ Hashgraph is a data structure and consensus algorithm that is:
 - Secure: Asynchronous Byzantine fault tolerant
 - Fair: Fairness of access, ordering, and timestamps
 
-These properties enable new decentralized applications such as a stock market, improved collaborative applications, real-time games, and auctions.
+These properties enable new decentralized applications such as a stock market, improved collaborative applications, real-time multiplayer games, and auctions.
 
 ---
 
@@ -95,7 +101,7 @@ These properties enable new decentralized applications such as a stock market, i
 - order of transactions preserved (compare with proof of work where transaction order is determined by miners)
 - no wasted computation (compare with blockchain forking)
 - just gossip and everything will work (low overhead)
-- really fast (no additional comms for consensus)
+- really fast virtual voting (no additional comms for consensus)
 
 ---
 
@@ -118,7 +124,7 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 <div class="container">
 <img class="pic" src="images/02-gossip.png">
 <div class="text">
-<p>Randomly pick someone to gossip with</p>
+<p>Randomly pick someone to gossip with to create <strong>events</strong></p>
 <img src="images/03-gossip-internals.png">
 </div>
 </div>
@@ -132,17 +138,15 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 ---
 
 <div class="container">
-<img class="pic" src="images/07-round-created.png">
-</div>
-
----
-
-<div class="container">
 <img class="pic" src="images/08-witnesses.png">
+<div class="text">
+<p>Events are divided into <strong>rounds created</strong></p>
+<p>First event from each member in each round are <strong>witnesses</strong></p>
+</div>
 </div>
 
 ---
-
+### voting on <strong>fame</strong> by next round witnesses (<strong>seeing</strong>)
 <div class="container">
 <img class="pic" src="images/10-fame1.png">
 <img class="pic" src="images/11-fame2.png">
@@ -151,7 +155,7 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 </div>
 
 ---
-
+### vote counting by next round witnesses (<strong>strongly seeing</strong>)
 <div class="container">
 <img class="pic" src="images/14-strongly-seeing1.png">
 <img class="pic" src="images/15-strongly-seeing2.png">
@@ -163,36 +167,79 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 
 <div class="container">
 <img class="pic" src="images/18-b2-famous.png">
+<div class="text">
+<p>B2 is decided to be <strong>famous</strong></p>
+</div>
 </div>
 
 ---
 
 <div class="container">
 <img class="pic" src="images/19-c2-votes.png">
+<div class="text">
+<p>Of all the round 3 witnesses, only C3 can see C2</p>
+</div>
 </div>
 
 ---
 
 <div class="container">
 <img class="pic" src="images/20-c2-count-votes.png">
+<div class="text">
+<p>B4 can strongly see all 4 votes, and decides that C2 is not famous</p>
+</div>
 </div>
 
 ---
 
 <div class="container">
 <img class="pic" src="images/21-decide-more-fames.png">
+<div class="text">
+<p>Similarly, elections are conducted for the other witnesses as well</p>
+<p>Once the fame of all witnesses in a round is decided, we can use that to find the consensus ordering of another set of events</p>
+</div>
 </div>
 
 ---
 
 <div class="container">
 <img class="pic" src="images/22-round-received.png">
+<div class="text">
+<p>Black event seen by all famous witnesses, so round received of 2</p>
+<p>Doesn't matter that C2 can't see it, as C2 is not famous</p>
+</div>
 </div>
 
 ---
 
 <div class="container">
 <img class="pic" src="images/23-not-received-yet.png">
+<div class="text">
+<p>For events not seen by all famous witnesses, wait for the next round</p>
+</div>
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/24-consensus.png">
+<div class="text">
+<p>For Consensus order, sort by:</p>
+<ol>
+<li>Round received</li>
+<li>Consensus timestamp (median of first received timings by creators of famous witnesses)
+<li>Whitened signature (signature XOR with signatures of all famous witnesses)
+</ol>
+</div>
+</div>
+
+---
+
+<div class="container">
+<img class="pic" src="images/25-demo-screenshot.png">
+<div class="text">
+<p>The example was adapted from an actual run with 4 members</p>
+</div>
 </div>
 
 ---
@@ -201,12 +248,12 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 
 - order transactions by the time a majority of the nodes learns about it (thru the gossips)
   - must be 2/3 or more, received by 50% is not good enough when 1/3 are attackers
-- what are witnesses for? some kind of optimization to save computations
-- what is strongly seeing for? to protect against forking
+- famous witnesses are like well-known and trusted events, and simplifies the computation
+- strongly seeing protects against forking, so no attacker can cheat by creating multiple famous witnesses in a single round
 
 ---
 
-# References and recommeded reading
+# References and recommended reading
 
 The Byzantine Generals Problem
 http://research.microsoft.com/users/lamport/pubs/pubs.html#byz
