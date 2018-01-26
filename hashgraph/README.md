@@ -57,7 +57,7 @@ strong {
 
 ---
 
-# Can Bitcoin tolerate 1/3 attacker nodes?
+# Do you need 51% to compromise Bitcoin?
 
 ![70% center](images/attack.png)
 
@@ -98,7 +98,7 @@ These properties enable new decentralized applications such as a stock market, i
 # Interesting characteristics
 
 - absolute confirmation of transactions (unlike proof of work)
-- order of transactions preserved (compare with proof of work where transaction order is determined by miners)
+- fair order of transactions (compare with proof of work where transaction order is determined by miners)
 - no wasted computation (compare with blockchain forking)
 - just gossip and everything will work (low overhead)
 - really fast virtual voting (no additional comms for consensus)
@@ -255,21 +255,36 @@ Refer to [Hashgraph graphical example](graphical.pdf)
 
 ---
 
+# Challenges of Growing Hashgraph
+
+- Non-permissioned network
+  - consensus with dynamic number of members
+- Scaling
+  - performance of large networks
+- Licensing
+  - barrier to adoption
+  - reactions of dev community
+- Language
+  - java only?
+  - porting to other languages (but this is not open source)
+
+---
+
 # References and recommended reading
 
 The Byzantine Generals Problem
 http://research.microsoft.com/users/lamport/pubs/pubs.html#byz
 
+The Swirlds Hashgraph Consensus Algorithm
+http://www.swirlds.com/downloads/SWIRLDS-TR-2016-01.pdf
+
 How Hashgraph Works (Graphically)
 http://www.swirlds.com/downloads/SWIRLDS-TR-2016-02.pdf
 
-Hashgraph security and attack resilience
+Hashgraph Security and Attack Resilience
 https://www.youtube.com/watch?v=pcToFASnyrc
 
-Deconfusing Decentralization
-https://youtu.be/7S1IqaSLrq8
-
-Hashgraph introduction at TechCrunch Disrupt
+Hashgraph Introduction at TechCrunch Disrupt
 https://youtu.be/ZrFrXFdRW4k
 
 Leemon Baird x Havard Talk
@@ -290,3 +305,6 @@ https://www.coindesk.com/short-guide-blockchain-consensus-protocols/
 
 Proof of Activity: Extending Bitcoin's Proof of Work via Proof of Stake
 https://eprint.iacr.org/2014/452.pdf
+
+Deconfusing Decentralization
+https://youtu.be/7S1IqaSLrq8
