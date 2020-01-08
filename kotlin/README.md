@@ -3,7 +3,7 @@ marp: true
 theme: default
 ---
 
-# Kotlin Feature Highlights
+# *Always* use **Kotlin** instead of Java
 
 ---
 
@@ -102,12 +102,87 @@ arr.filter { it%2 == 1 }  // implicit single param 'it'
 
 ---
 
-# Interop with Java
+# Interop with Java - just import and use
+
+```
+import java.util.*
+
+fun demo(source: List<Int>) {
+    val list = ArrayList<Int>()
+    // 'for'-loops work for Java collections:
+    for (item in source) {
+        list.add(item)
+    }
+    // Operator conventions work as well:
+    for (i in 0..source.size - 1) {
+        list[i] = source[i] // get and set are called
+    }
+}
+```
 
 ---
+
+# Interop with Java - getters and setters
+
+```
+import java.util.Calendar
+
+fun calendarDemo() {
+    val calendar = Calendar.getInstance()
+    if (calendar.firstDayOfWeek == Calendar.SUNDAY) {  // call getFirstDayOfWeek()
+        calendar.firstDayOfWeek = Calendar.MONDAY      // call setFirstDayOfWeek()
+    }
+    if (!calendar.isLenient) {                         // call isLenient()
+        calendar.isLenient = true                      // call setLenient()
+    }
+}
+```
+
+---
+
+# Interop with Java - calling Kotlin from Java
+
+```
+var firstName: String
+```
+gets compiled to the following Java declarations:
+```
+private String firstName;
+
+public String getFirstName() {
+    return firstName;
+}
+
+public void setFirstName(String firstName) {
+    this.firstName = firstName;
+}
+```
+
+---
+
 
 # Other stuff
 
 * Destructuring Declarations
-* Named Arguments
+```
+val jane = User("Jane", 35)
+val (name, age) = jane
+```
+* Named Arguments and Default Values
+```
+val jack = User(name = "Jack", age = 1)
+```
 * Extension Functions
+```
+fun String.singlishify() {
+    // implementation
+}
+```
+* No Checked Exceptions
+
+---
+
+# Other interesting reads
+
+* How Kotlin defaults support the ideas in "Effective Java" - https://www.lukle.at/blog/2016/12/how-effective-java-influenced-the-design-of-kotlin-part-1/
+* How to use Kotlin with Spark - https://tomstechnicalblog.blogspot.com/2016/11/using-kotlin-language-with-spark.html
